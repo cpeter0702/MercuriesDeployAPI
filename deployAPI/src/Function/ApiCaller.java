@@ -117,8 +117,13 @@ public class ApiCaller {
 		logger.info("取得部屬ID成功！");
 		String blId = getBaselineId(client, dsId);
 		logger.info("取得UAT分支ID成功！");
-		HttpGet httpGet = new HttpGet("https://" + ip_DC + ":9446/decisioncenter-api/v1/deployments/" + dpId
+		
+		// 20241216 modify by Peter Liao : Elvis 說 9446 and 9447 都改成 9443 port
+		HttpGet httpGet = new HttpGet("https://" + ip_DC + ":9443/decisioncenter-api/v1/deployments/" + dpId
 				+ "/download?baselineId=" + blId + "&includeXOMInArchive=true");
+//		HttpGet httpGet = new HttpGet("https://" + ip_DC + ":9446/decisioncenter-api/v1/deployments/" + dpId
+//				+ "/download?baselineId=" + blId + "&includeXOMInArchive=true");
+		
 		httpGet.setHeader("Accept", "application/octet-stream");
 		HttpResponse httpResponse = client.execute(httpGet);
 		HttpEntity httpEntity = httpResponse.getEntity();
@@ -137,7 +142,11 @@ public class ApiCaller {
 	public static String getDecisioServiceId(CloseableHttpClient client, String name)
 			throws ClientProtocolException, IOException {
 		logger.info("取得決策服務ID...");
-		HttpGet httpGet = new HttpGet("https://" + ip_DC + ":9446/decisioncenter-api/v1/decisionservices");
+		
+		// 20241216 modify by Peter Liao : Elvis 說 9446 and 9447 都改成 9443 port
+		HttpGet httpGet = new HttpGet("https://" + ip_DC + ":9443/decisioncenter-api/v1/decisionservices");
+//		HttpGet httpGet = new HttpGet("https://" + ip_DC + ":9446/decisioncenter-api/v1/decisionservices");
+		
 		httpGet.setHeader("Accept", "application/json");
 		HttpResponse httpResponse = client.execute(httpGet);
 		HttpEntity httpEntity = httpResponse.getEntity();
@@ -161,8 +170,13 @@ public class ApiCaller {
 	public static String getDeploymentId(CloseableHttpClient client, String id)
 			throws ClientProtocolException, IOException {
 		logger.info("取得部屬ID...");
+		
+		// 20241216 modify by Peter Liao : Elvis 說 9446 and 9447 都改成 9443 port
 		HttpGet httpGet = new HttpGet(
-				"https://" + ip_DC + ":9446/decisioncenter-api/v1/decisionservices/" + id + "/deployments");
+				"https://" + ip_DC + ":9443/decisioncenter-api/v1/decisionservices/" + id + "/deployments");
+//		HttpGet httpGet = new HttpGet(
+//				"https://" + ip_DC + ":9446/decisioncenter-api/v1/decisionservices/" + id + "/deployments");
+		
 		httpGet.setHeader("Accept", "application/json");
 		HttpResponse httpResponse = client.execute(httpGet);
 		HttpEntity httpEntity = httpResponse.getEntity();
@@ -176,8 +190,13 @@ public class ApiCaller {
 	public static String getBaselineId(CloseableHttpClient client, String id)
 			throws ClientProtocolException, IOException {
 		logger.info("取得分支ID...");
+		
+		// 20241216 modify by Peter Liao : Elvis 說 9446 and 9447 都改成 9443 port
 		HttpGet httpGet = new HttpGet(
-				"https://" + ip_DC + ":9446/decisioncenter-api/v1/decisionservices/" + id + "/branches");
+				"https://" + ip_DC + ":9443/decisioncenter-api/v1/decisionservices/" + id + "/branches");
+//		HttpGet httpGet = new HttpGet(
+//				"https://" + ip_DC + ":9446/decisioncenter-api/v1/decisionservices/" + id + "/branches");
+		
 		httpGet.setHeader("Accept", "application/json");
 		HttpResponse httpResponse = client.execute(httpGet);
 		HttpEntity httpEntity = httpResponse.getEntity();
@@ -218,11 +237,16 @@ public class ApiCaller {
 		}
 		HttpPost httpPost;
 		if (goal.equals("UAT")) {
+			
+			// 20241216 modify by Peter Liao : Elvis 說 9446 and 9447 都改成 9443 port
+			httpPost = new HttpPost("https://" + ip_resUAT + ":9443/res/api/v1/ruleapps");
 			// localhost can change to UAT IP
-			httpPost = new HttpPost("https://" + ip_resUAT + ":9447/res/api/v1/ruleapps");
+			// httpPost = new HttpPost("https://" + ip_resUAT + ":9447/res/api/v1/ruleapps");
 		} else {
+			// 20241216 modify by Peter Liao : Elvis 說 9446 and 9447 都改成 9443 port
+			httpPost = new HttpPost("https://" + ip_resProd + ":9443/res/api/v1/ruleapps");
 			// localhost can change to Prod IP
-			httpPost = new HttpPost("https://" + ip_resProd + ":9447/res/api/v1/ruleapps");
+			// httpPost = new HttpPost("https://" + ip_resProd + ":9447/res/api/v1/ruleapps");
 		}
 		httpPost.setHeader("Content-type", "application/octet-stream");
 		httpPost.setHeader("Accept", "application/json");
@@ -388,7 +412,11 @@ public class ApiCaller {
 			NoSuchAlgorithmException, KeyStoreException {
 		CloseableHttpClient client = ApiCaller.getClient("resAdmin", "resAdmin");
 		String xomName = xomFile.getName().substring(0, xomFile.getName().indexOf("_"));
-		HttpPost httpPost = new HttpPost("https://" + ip + ":9447/res/api/v1/xoms/"+xomName+".jar");
+		
+		// 20241216 modify by Peter Liao : Elvis 說 9446 and 9447 都改成 9443 port
+		HttpPost httpPost = new HttpPost("https://" + ip + ":9443/res/api/v1/xoms/"+xomName+".jar");
+		// HttpPost httpPost = new HttpPost("https://" + ip + ":9447/res/api/v1/xoms/"+xomName+".jar");
+		
 		httpPost.setHeader("Content-type", "application/octet-stream");
 		httpPost.setHeader("Accept", "application/json");
 		httpPost.setEntity(new FileEntity(xomFile));
@@ -413,7 +441,9 @@ public class ApiCaller {
 	public static String updateLibrary(String libraryPath, String xomUri, String ip) throws KeyManagementException,
 			NoSuchAlgorithmException, KeyStoreException, ClientProtocolException, IOException {
 		CloseableHttpClient client = ApiCaller.getClient("resAdmin", "resAdmin");
-		HttpPut httpPut = new HttpPut("https://" + ip + ":9447/res/api/v1/libraries" + libraryPath);
+		// 20241216 modify by Peter Liao : Elvis 說 9446 and 9447 都改成 9443 port
+		HttpPut httpPut = new HttpPut("https://" + ip + ":9443/res/api/v1/libraries" + libraryPath);
+		// HttpPut httpPut = new HttpPut("https://" + ip + ":9447/res/api/v1/libraries" + libraryPath);
 		httpPut.setHeader("Content-type", "text/plain");
 		httpPut.setHeader("Accept", "application/json");
 		httpPut.setEntity(new StringEntity(xomUri));
@@ -452,14 +482,19 @@ public class ApiCaller {
 		String testMessage = "";
 		if (!resultPath.equals("")) {
 			CloseableHttpClient client = getClient(user_RES, password_RES);
-			HttpGet httpGet = new HttpGet("https://" + ip + ":9447/DecisionService/rest" + resultPath + "/json");
+			
+			// 20241216 modify by Peter Liao : Elvis 說 9446 and 9447 都改成 9443 port
+			HttpGet httpGet = new HttpGet("https://" + ip + ":9443/DecisionService/rest" + resultPath + "/json");
+//			HttpGet httpGet = new HttpGet("https://" + ip + ":9447/DecisionService/rest" + resultPath + "/json");
 			httpGet.setHeader("Accept", "application/json");
 			HttpResponse httpResponse = client.execute(httpGet);
 			HttpEntity httpEntity = httpResponse.getEntity();
 			String httpEntityStr = EntityUtils.toString(httpEntity, "UTF-8");
 			client.close();
 			client = getClient(user_RES, password_RES);
-			HttpPost httpPost = new HttpPost("https://" + ip + ":9447/DecisionService/rest" + resultPath);
+			// 20241216 modify by Peter Liao : Elvis 說 9446 and 9447 都改成 9443 port
+			HttpPost httpPost = new HttpPost("https://" + ip + ":9443/DecisionService/rest" + resultPath);
+//			HttpPost httpPost = new HttpPost("https://" + ip + ":9447/DecisionService/rest" + resultPath);
 			httpPost.setHeader("Accept", "application/json");
 			httpPost.setHeader("Content-type", "application/json");
 			httpPost.setEntity(new StringEntity(httpEntityStr));
@@ -490,7 +525,10 @@ public class ApiCaller {
 		String ruleAppId = getRuleAppId(client, ruleAppName, "Prod");
 		String ruleSetId = getRuleSetId(client, ruleAppId, "Prod");
 		// localhost can change to Prod IP
-		HttpDelete httpDelete = new HttpDelete("https://" + ip_resProd + ":9447/res/api/v1/ruleapps/" + ruleSetId);
+		
+		// 20241216 modify by Peter Liao : Elvis 說 9446 and 9447 都改成 9443 port
+		HttpDelete httpDelete = new HttpDelete("https://" + ip_resProd + ":9443/res/api/v1/ruleapps/" + ruleSetId);
+		// HttpDelete httpDelete = new HttpDelete("https://" + ip_resProd + ":9447/res/api/v1/ruleapps/" + ruleSetId);
 		httpDelete.setHeader("Accept", "application/json");
 		HttpResponse httpResponse = client.execute(httpDelete);
 		HttpEntity httpEntity = httpResponse.getEntity();
@@ -531,7 +569,10 @@ public class ApiCaller {
 		String ruleSetId = getRuleSetId(client, ruleAppId, "UAT");
 		logger.info("取得Rule Set ID成功！");
 		// localhost can change to UAT IP
-		HttpDelete httpDelete = new HttpDelete("https://" + ip_resUAT + ":9447/res/api/v1/ruleapps/" + ruleSetId);
+		// 20241216 modify by Peter Liao : Elvis 說 9446 and 9447 都改成 9443 port
+		HttpDelete httpDelete = new HttpDelete("https://" + ip_resUAT + ":9443/res/api/v1/ruleapps/" + ruleSetId);
+//		HttpDelete httpDelete = new HttpDelete("https://" + ip_resUAT + ":9447/res/api/v1/ruleapps/" + ruleSetId);
+		
 		httpDelete.setHeader("Accept", "application/json");
 		HttpResponse httpResponse = client.execute(httpDelete);
 		HttpEntity httpEntity = httpResponse.getEntity();
@@ -561,11 +602,17 @@ public class ApiCaller {
 		logger.info("取得RuleApp ID...");
 		HttpGet httpGet = null;
 		if (goal.equals("UAT")) {
+			// 20241216 modify by Peter Liao : Elvis 說 9446 and 9447 都改成 9443 port
 			httpGet = new HttpGet(
-					"https://" + ip_resUAT + ":9447/res/api/v1/ruleapps/" + ruleAppName + "/highest?parts=none");
+					"https://" + ip_resUAT + ":9443/res/api/v1/ruleapps/" + ruleAppName + "/highest?parts=none");
+//			httpGet = new HttpGet(
+//					"https://" + ip_resUAT + ":9447/res/api/v1/ruleapps/" + ruleAppName + "/highest?parts=none");
 		} else {
+			// 20241216 modify by Peter Liao : Elvis 說 9446 and 9447 都改成 9443 port
 			httpGet = new HttpGet(
-					"https://" + ip_resProd + ":9447/res/api/v1/ruleapps/" + ruleAppName + "/highest?parts=none");
+					"https://" + ip_resProd + ":9443/res/api/v1/ruleapps/" + ruleAppName + "/highest?parts=none");
+//			httpGet = new HttpGet(
+//					"https://" + ip_resProd + ":9447/res/api/v1/ruleapps/" + ruleAppName + "/highest?parts=none");
 		}
 		httpGet.setHeader("Accept", "application/json");
 		HttpResponse httpResponse = client.execute(httpGet);
@@ -582,11 +629,17 @@ public class ApiCaller {
 		logger.info("取得RuleSet ID...");
 		HttpGet httpGet = null;
 		if (goal.equals("UAT")) {
+			// 20241216 modify by Peter Liao : Elvis 說 9446 and 9447 都改成 9443 port
 			httpGet = new HttpGet(
-					"https://" + ip_resUAT + ":9447/res/api/v1/ruleapps/" + ruleAppId + "/rulesets?parts=version");
+					"https://" + ip_resUAT + ":9443/res/api/v1/ruleapps/" + ruleAppId + "/rulesets?parts=version");
+//			httpGet = new HttpGet(
+//					"https://" + ip_resUAT + ":9447/res/api/v1/ruleapps/" + ruleAppId + "/rulesets?parts=version");
 		} else {
+			// 20241216 modify by Peter Liao : Elvis 說 9446 and 9447 都改成 9443 port
 			httpGet = new HttpGet(
-					"https://" + ip_resProd + ":9447/res/api/v1/ruleapps/" + ruleAppId + "/rulesets?parts=version");
+					"https://" + ip_resProd + ":9443/res/api/v1/ruleapps/" + ruleAppId + "/rulesets?parts=version");
+//			httpGet = new HttpGet(
+//					"https://" + ip_resProd + ":9447/res/api/v1/ruleapps/" + ruleAppId + "/rulesets?parts=version");
 		}
 		httpGet.setHeader("Accept", "application/json");
 		HttpResponse httpResponse = client.execute(httpGet);
