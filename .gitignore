@@ -7,6 +7,9 @@
 .settings/
 .loadpath
 .factorypath
+*.class
+
+/deployAPI/WebContent/WEB-INF/classes/**
 
 # Log file
 *.log
@@ -19,7 +22,6 @@
 
 # Package Files #
 *.jar
-*.war
 *.nar
 *.ear
 *.zip
