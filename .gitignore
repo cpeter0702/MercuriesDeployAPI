@@ -21,7 +21,6 @@ deployAPI/WebContent/WEB-INF/classes/
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.nar
 *.ear
 *.zip
