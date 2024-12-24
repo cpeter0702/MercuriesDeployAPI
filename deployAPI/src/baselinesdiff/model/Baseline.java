@@ -12,6 +12,8 @@ package baselinesdiff.model;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import baselinesdiff.Connection;
 import baselinesdiff.factory.ProjectFactory;
 import ilog.rules.teamserver.brm.IlrBaseline;
@@ -19,6 +21,7 @@ import ilog.rules.teamserver.brm.IlrRuleProject;
 import ilog.rules.teamserver.model.IlrApplicationException;
 import ilog.rules.teamserver.model.IlrSession;
 import ilog.rules.teamserver.model.IlrSessionHelper;
+import services.deployRuleAppService;
 
 
 /**
@@ -56,13 +59,24 @@ public class Baseline {
 	 */
 	Connection connection;
 
-
+	public static Logger logger = Logger.getLogger(Baseline.class);
 
 	/**
 	 * Creates an instance of a baseline and eventually creates it.
 	 */
 	public Baseline(String projectname, String baseline, Connection connection) throws Exception {
 		super();
+		logger.info("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+		logger.info("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+		logger.info("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+		logger.info("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+		logger.info("[PPPPP] projectname: " + projectname);
+		logger.info("[PPPPP] baseline: " + baseline);
+		logger.info("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+		logger.info("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+		logger.info("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+		logger.info("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+		logger.info("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 		this.projectname = projectname;
 		this.baselinename = baseline;
 		this.connection=connection;

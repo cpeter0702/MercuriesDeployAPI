@@ -39,6 +39,7 @@ import baselinesdiff.model.Baseline;
 import ilog.rules.teamserver.brm.IlrActionRule;
 import ilog.rules.teamserver.brm.IlrBaseline;
 import ilog.rules.teamserver.brm.IlrDecisionTable;
+import ilog.rules.teamserver.client.IlrRemoteSessionFactory;
 import ilog.rules.teamserver.model.BranchHelper;
 import ilog.rules.teamserver.model.Change;
 import ilog.rules.teamserver.model.IlrApplicationException;
@@ -155,11 +156,24 @@ public class DifferenceBaseline {
 	public static void getActionRule() throws Exception {
 		diffTxtHelper.writeText("[[動作規則差異清單]]");
 		diffTxtHelper.writeText("=================================================================================");
-		Connection currentConnection = new Connection(user, password, url, datasource);
+		logger.info("[PPPPPPP] 000000000000000");
+		logger.info("[PPPPPPP] user: " + user);
+		logger.info("[PPPPPPP] password: " + password);
+		logger.info("[PPPPPPP] url: " + url);
+		logger.info("[PPPPPPP] datasource: " + datasource);
+		
+		IlrRemoteSessionFactory ilrRemoteSessionFactory = new IlrRemoteSessionFactory();
+		ilrRemoteSessionFactory.connect(user, password, url, datasource);
+		
+		Connection currentConnection = new Connection(ilrRemoteSessionFactory, user, password, url, datasource);
+		logger.info("[PPPPPPP] 1111111111111111");
+		logger.info("[PPPPPPP] currentConnection: " + currentConnection == null);
 		Baseline currentbaseline = new Baseline(projectName, baseline_M, currentConnection);
+		logger.info("[PPPPPPP] 2222222222222222");
 		Baseline otherbaseline = new Baseline(projectName, baseline_U, currentConnection);
+		logger.info("[PPPPPPP] 3333333333333333");
 		getDifference(currentbaseline.getBaseline(), otherbaseline.getBaseline(), currentConnection, ActionRule);
-
+		logger.info("[PPPPPPP] 4444444444444444");
 	}
 
 	public static void getDecisionTable() throws Exception {
